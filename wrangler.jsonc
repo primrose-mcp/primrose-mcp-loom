@@ -1,0 +1,82 @@
+{
+  // ==========================================================================
+  // Loom MCP Server - Wrangler Configuration
+  // ==========================================================================
+  //
+  // MULTI-TENANT ARCHITECTURE:
+  // This server supports multiple tenants. Credentials are passed via request
+  // headers, NOT stored as wrangler secrets. This allows a single deployment
+  // to serve multiple customers.
+  //
+  // Authentication:
+  // - X-Loom-Access-Token: OAuth access token for Loom API
+  // ==========================================================================
+
+  "name": "primrose-mcp-loom",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-12-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // ==========================================================================
+  // Environment Variables (server-wide configuration, not per-tenant)
+  // ==========================================================================
+  "vars": {
+    "CHARACTER_LIMIT": "50000",
+    "DEFAULT_PAGE_SIZE": "20",
+    "MAX_PAGE_SIZE": "100"
+  },
+
+  // ==========================================================================
+  // Multi-Tenant Authentication (via Request Headers)
+  // ==========================================================================
+  //
+  // Tenant credentials are passed via HTTP headers on each request:
+  //
+  // Required:
+  //   X-Loom-Access-Token: OAuth access token for Loom API
+  //
+  // Optional:
+  //   X-Loom-Base-URL: Override the default Loom API base URL
+
+  // ==========================================================================
+  // KV Namespace (uncomment for OAuth token storage)
+  // ==========================================================================
+  // Create: npx wrangler kv namespace create "OAUTH_KV"
+  //
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "OAUTH_KV",
+  //     "id": "<YOUR_KV_NAMESPACE_ID>"
+  //   }
+  // ],
+
+  // ==========================================================================
+  // Durable Objects (uncomment for stateful sessions)
+  // ==========================================================================
+  // "durable_objects": {
+  //   "bindings": [
+  //     {
+  //       "name": "MCP_SESSIONS",
+  //       "class_name": "McpSessionDO"
+  //     }
+  //   ]
+  // },
+  // "migrations": [
+  //   {
+  //     "tag": "v1",
+  //     "new_classes": ["McpSessionDO"]
+  //   }
+  // ],
+
+  // ==========================================================================
+  // Development
+  // ==========================================================================
+  "dev": {
+    "port": 8787,
+    "local_protocol": "http"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
